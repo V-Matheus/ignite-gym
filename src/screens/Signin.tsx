@@ -1,6 +1,6 @@
-import { Image, VStack } from '@gluestack-ui/themed';
-
+import { Center, Image, Text, VStack } from '@gluestack-ui/themed';
 import BackGroundImg from '@assets/background.png';
+import Logo from '@assets/logo.svg';
 
 export function Signin() {
   return (
@@ -11,8 +11,13 @@ export function Signin() {
         alt="Pessoas treinando"
         w="$full"
         h={624}
-        position='absolute'
+        position="absolute"
       />
+
+      <Center my="$24">
+        <Logo />
+        <Text color='$gray100' fontSize='$sm'>Treine sua mente e o seu corpo.</Text>
+      </Center>
     </VStack>
   );
 }
