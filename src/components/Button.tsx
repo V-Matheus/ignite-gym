@@ -19,30 +19,28 @@ export function Button({
   ...rest
 }: ButtonProps) {
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-      <GlueStackButton
-        w="$full"
-        h="$14"
-        bg={variant === 'outline' ? 'transparent' : '$green700'}
-        borderColor="$green500"
-        borderWidth={variant === 'outline' ? '$1' : '$0'}
-        borderRadius="$sm"
-        $active-bg={variant === 'outline' ? '$gray500' : '$green500'}
-        disabled={isLoading}
-        {...rest}
-      >
-        {isLoading ? (
-          <ButtonSpinner color="$white" />
-        ) : (
-          <Text
-            color={variant === 'outline' ? '$green500' : '$white'}
-            fontFamily="$heading"
-            fontSize="$sm"
-          >
-            {title}
-          </Text>
-        )}
-      </GlueStackButton>
-    </ScrollView>
+    <GlueStackButton
+      w="$full"
+      h="$14"
+      bg={variant === 'outline' ? 'transparent' : '$green700'}
+      borderColor="$green500"
+      borderWidth={variant === 'outline' ? '$1' : '$0'}
+      borderRadius="$sm"
+      $active-bg={variant === 'outline' ? '$gray500' : '$green500'}
+      disabled={isLoading}
+      {...rest}
+    >
+      {isLoading ? (
+        <ButtonSpinner color="$white" />
+      ) : (
+        <Text
+          color={variant === 'outline' ? '$green500' : '$white'}
+          fontFamily="$heading"
+          fontSize="$sm"
+        >
+          {title}
+        </Text>
+      )}
+    </GlueStackButton>
   );
 }
