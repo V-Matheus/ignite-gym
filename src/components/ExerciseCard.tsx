@@ -9,7 +9,7 @@ type ExerciseCardProps = ComponentProps<typeof TouchableOpacity>;
 export function ExerciseCard({ ...rest }: ExerciseCardProps) {
   return (
     <TouchableOpacity {...rest}>
-      <HStack bg="$gray500" alignItems="center" p="$2" pr="$4" rounded="$md">
+      <HStack bg="$gray500" alignItems="center" p="$2" pr="$4" rounded="$md" mb='$4'>
         <Image
           source={{
             uri: 'https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/costas-puxada-aberta-com-barra-no-pulley-1.gif',
