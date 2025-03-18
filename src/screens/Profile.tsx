@@ -1,3 +1,4 @@
+import { Input } from '@components/Input';
 import { ScreenHeader } from '@components/ScreenHeader';
 import { UserPhoto } from '@components/UserPhoto';
 import { Center, ScrollView, Text, VStack } from '@gluestack-ui/themed';
@@ -17,10 +18,21 @@ export function Profile() {
           />
 
           <TouchableOpacity>
-            <Text color="$green500" fontFamily="$heading" fontSize="$md" mt='$2' mb='$8'>
+            <Text
+              color="$green500"
+              fontFamily="$heading"
+              fontSize="$md"
+              mt="$2"
+              mb="$8"
+            >
               Alterar Foto
             </Text>
           </TouchableOpacity>
+
+          <Center w="$full" gap="$4">
+            <Input placeholder="Nome" bg="$gray600" />
+            <Input value="victormatheus507@gmail.com" bg="$gray600" isReadOnly />
+          </Center>
         </Center>
       </ScrollView>
     </VStack>
