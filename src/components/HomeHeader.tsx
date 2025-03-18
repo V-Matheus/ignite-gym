@@ -9,8 +9,7 @@ export function HomeHeader() {
       <UserPhoto
         source={{ uri: 'https://github.com/V-Matheus.png' }}
         alt="Imagem do usuário"
-        w="$16"
-        h="$16"
+        size="sm"
       />
       <VStack flex={1}>
         <Text color="$gray100" fontSize="$sm">
@@ -21,7 +20,7 @@ export function HomeHeader() {
         </Heading>
       </VStack>
 
-      <Icon as={LogOut} color="$gray100" size='md' />
+      <Icon as={LogOut} color="$gray100" size="md" />
     </HStack>
   );
 }
