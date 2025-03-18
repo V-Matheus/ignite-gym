@@ -1,6 +1,7 @@
 import { Heading, HStack, Text, VStack } from '@gluestack-ui/themed';
 import { UserPhoto } from './UserPhoto';
 import { LogOut } from 'lucide-react-native';
+import { Icon } from '@gluestack-ui/themed';
 
 export function HomeHeader() {
   return (
@@ -20,7 +21,7 @@ export function HomeHeader() {
         </Heading>
       </VStack>
 
-      <LogOut color="#ccc" size={24} />
+      <Icon as={LogOut} color="$gray100" size='md' />
     </HStack>
   );
 }
