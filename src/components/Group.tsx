@@ -18,6 +18,7 @@ export function Group({ name, isActive, ...rest }: GroupProps) {
       alignItems="center"
       borderColor="$green500"
       borderWidth={isActive ? 1 : 0}
+      mr='$3'
       sx={{
         ':active': {
           borderWidth: 1,
