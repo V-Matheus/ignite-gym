@@ -13,6 +13,8 @@ import { Button } from '@components/Button';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 type FormDataProps = {
   name: string;
@@ -21,12 +23,19 @@ type FormDataProps = {
   password_confirm: string;
 };
 
+const SignUpSchema = yup.object({
+  name: yup.string().required('Informe o nome'),
+  email: yup.string().required('Informe o e-mail').email('E-mail inválido'),
+});
+
 export function SignUp() {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormDataProps>();
+  } = useForm<FormDataProps>({
+    resolver: yupResolver(SignUpSchema),
+  });
 
   const navigator = useNavigation();
 
@@ -72,7 +81,6 @@ export function SignUp() {
             <Controller
               control={control}
               name="name"
-              rules={{ required: 'Nome é obrigatório' }}
               render={({ field: { onChange, value } }) => (
                 <Input
                   placeholder="Nome"
