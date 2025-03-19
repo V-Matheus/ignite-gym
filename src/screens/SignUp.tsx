@@ -15,7 +15,7 @@ import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
 export function SignUp() {
-  const { control } = useForm();
+  const { control, handleSubmit } = useForm();
 
   const navigator = useNavigation();
 
@@ -23,8 +23,8 @@ export function SignUp() {
     navigator.goBack();
   }
 
-  function handleSignUp() {
-    console.log(name);
+  function handleSignUp(data: any) {
+    console.log(data);
   }
 
   return (
@@ -101,11 +101,16 @@ export function SignUp() {
                   secureTextEntry
                   onChangeText={onChange}
                   value={value}
+                  onSubmitEditing={handleSubmit(handleSignUp)}
+                  returnKeyType="send"
                 />
               )}
             />
 
-            <Button onPress={handleSignUp} title="Criar e acessar" />
+            <Button
+              onPress={handleSubmit(handleSignUp)}
+              title="Criar e acessar"
+            />
           </Center>
 
           <Button
