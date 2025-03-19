@@ -11,6 +11,7 @@ import {
 } from '@gluestack-ui/themed';
 import { TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSytem from 'expo-file-system';
 import { useState } from 'react';
 
 export function Profile() {
@@ -27,7 +28,14 @@ export function Profile() {
 
     if (photoSelected.canceled) return;
 
-    setUserPhoto(photoSelected.assets[0].uri);
+    const photoUri = photoSelected.assets[0].uri;
+    if (photoUri) {
+      const photoInfo = (await FileSytem.getInfoAsync(photoUri)) as {
+        size: number;
+      };
+
+      setUserPhoto(photoUri);
+    }
   }
 
   return (
