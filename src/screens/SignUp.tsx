@@ -22,7 +22,11 @@ type FormDataProps = {
 };
 
 export function SignUp() {
-  const { control, handleSubmit } = useForm<FormDataProps>();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormDataProps>();
 
   const navigator = useNavigation();
 
@@ -30,8 +34,13 @@ export function SignUp() {
     navigator.goBack();
   }
 
-  function handleSignUp({email, name, password, password_confirm}: FormDataProps) {
-    console.log({email, name, password, password_confirm});
+  function handleSignUp({
+    email,
+    name,
+    password,
+    password_confirm,
+  }: FormDataProps) {
+    console.log({ email, name, password, password_confirm });
   }
 
   return (
@@ -71,6 +80,10 @@ export function SignUp() {
                 />
               )}
             />
+
+            {errors.name?.message && (
+              <Text color="$white">{errors.name.message}</Text>
+            )}
 
             <Controller
               control={control}
