@@ -10,8 +10,14 @@ import {
   VStack,
 } from '@gluestack-ui/themed';
 import { TouchableOpacity } from 'react-native';
+import * as ImagePicker from 'expo-image-picker' 
 
 export function Profile() {
+
+  async  function handleUserPhotoSelect() {
+   await ImagePicker.launchImageLibraryAsync()
+  }
+
   return (
     <VStack flex={1}>
       <ScreenHeader title="Perfil" />
@@ -24,7 +30,7 @@ export function Profile() {
             size="xl"
           />
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleUserPhotoSelect}>
             <Text
               color="$green500"
               fontFamily="$heading"
