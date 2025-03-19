@@ -14,8 +14,15 @@ import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
+type FormDataProps = {
+  name: string;
+  email: string;
+  password: string;
+  password_confirm: string;
+};
+
 export function SignUp() {
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit } = useForm<FormDataProps>();
 
   const navigator = useNavigation();
 
@@ -23,8 +30,8 @@ export function SignUp() {
     navigator.goBack();
   }
 
-  function handleSignUp(data: any) {
-    console.log(data);
+  function handleSignUp({email, name, password, password_confirm}: FormDataProps) {
+    console.log({email, name, password, password_confirm});
   }
 
   return (
