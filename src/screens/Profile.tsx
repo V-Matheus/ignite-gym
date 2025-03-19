@@ -8,6 +8,7 @@ import {
   ScrollView,
   Text,
   VStack,
+  useToast,
 } from '@gluestack-ui/themed';
 import { Alert, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
@@ -19,6 +20,9 @@ export function Profile() {
   const [userPhoto, setUserPhoto] = useState(
     'https://github.com/V-Matheus.png',
   );
+
+  const toast = useToast();
+
   async function handleUserPhotoSelect() {
     try {
       const photoSelected = await ImagePicker.launchImageLibraryAsync({
@@ -37,9 +41,18 @@ export function Profile() {
         };
 
         if (photoInfo && photoInfo.size / 1024 / 1024 > 5)
-          return Alert.alert(
-            'Essa imagem é muito grande. Escolha uma de até 5MB',
-          );
+          return toast.show({
+            placement: 'top',
+            render: ({ id }) => (
+              <ToastMenssage
+                id={id}
+                action="error"
+                title="Imagem muito grande!"
+                description="Essa imagem é muito grande. Escolha uma de até 5MB."
+                onClose={() => toast.close(id)}
+              />
+            ),
+          });
 
         setUserPhoto(photoUri);
       }
@@ -51,14 +64,6 @@ export function Profile() {
   return (
     <VStack flex={1}>
       <ScreenHeader title="Perfil" />
-
-      <ToastMenssage
-        id="1"
-        title="Mensagem de exemplo"
-        description="awoidoawndoiawnoidnoiawdoinoawidoanowidnaiowndoianwiodn"
-        action="success"
-        onClose={() => {}}
-      />
 
       <ScrollView contentContainerStyle={{ paddingBottom: 36 }}>
         <Center mt="$6" px="$10">
