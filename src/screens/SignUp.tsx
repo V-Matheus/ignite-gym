@@ -51,14 +51,14 @@ export function SignUp() {
     navigator.goBack();
   }
 
-  function handleSignUp({
+  async function handleSignUp({
     email,
     name,
     password,
     password_confirm,
   }: FormDataProps) {
     try {
-      fetch('http://192.168.0.112:3333/users', {
+      const response = await fetch('http://192.168.0.112:3333/users', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -70,9 +70,10 @@ export function SignUp() {
           password,
           password_confirm,
         }),
-      })
-        .then((response) => response.json())
-        .then((data) => console.log(data));
+      });
+
+      const data = await response.json();
+      console.log(data);
     } catch (error) {}
   }
 
