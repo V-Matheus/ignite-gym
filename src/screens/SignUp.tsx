@@ -57,12 +57,7 @@ export function SignUp() {
     navigator.goBack();
   }
 
-  async function handleSignUp({
-    email,
-    name,
-    password,
-    password_confirm,
-  }: FormDataProps) {
+  async function handleSignUp({ email, name, password }: FormDataProps) {
     try {
       const response = await api.post('/users', {
         name,
@@ -170,9 +165,9 @@ export function SignUp() {
                   secureTextEntry
                   onChangeText={onChange}
                   value={value}
+                  errorMessage={errors.password_confirm?.message}
                   onSubmitEditing={handleSubmit(handleSignUp)}
                   returnKeyType="send"
-                  errorMessage={errors.password_confirm?.message}
                 />
               )}
             />
