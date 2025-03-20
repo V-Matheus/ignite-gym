@@ -4,6 +4,7 @@ import {
   Image,
   ScrollView,
   Text,
+  useToast,
   VStack,
 } from '@gluestack-ui/themed';
 import BackGroundImg from '@assets/background.png';
@@ -17,6 +18,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useContext } from 'react';
 import { AuthContext } from '@contexts/AuthContext';
+import { AppError } from '@utils/AppError';
+import { ToastMenssage } from '@components/ToastMenssage';
 
 type FormDataProps = {
   email: string;
@@ -34,6 +37,7 @@ const SignInSchema = yup.object({
 export function SignIn() {
   const navigator = useNavigation<AuthNavigatorRoutesProps>();
   const { signIn } = useContext(AuthContext);
+  const toast = useToast();
 
   function handleNewAccount() {
     navigator.navigate('signUp');
@@ -48,7 +52,30 @@ export function SignIn() {
   });
 
   async function handleSignIn({ email, password }: FormDataProps) {
-    await signIn(email, password);
+    try {
+      await signIn(email, password);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : 'Não foi possível entrar na conta';
+
+      if (isAppError) {
+        if (isAppError) {
+          toast.show({
+            placement: 'top',
+            render: ({ id }) => (
+              <ToastMenssage
+                id={id}
+                action="error"
+                title={title}
+                onClose={() => toast.close(id)}
+              />
+            ),
+          });
+        }
+      }
+    }
   }
 
   return (
