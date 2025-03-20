@@ -30,7 +30,10 @@ const SignUpSchema = yup.object({
     .string()
     .required('Informe a senha')
     .min(6, 'Mínimo de 6 dígitos'),
-  password_confirm: yup.string().required('Confirme a senha').oneOf([yup.ref('password'), ''], 'A confirmação da senha não confere'),
+  password_confirm: yup
+    .string()
+    .required('Confirme a senha')
+    .oneOf([yup.ref('password'), ''], 'A confirmação da senha não confere'),
 });
 
 export function SignUp() {
@@ -54,7 +57,21 @@ export function SignUp() {
     password,
     password_confirm,
   }: FormDataProps) {
-    console.log({ email, name, password, password_confirm });
+    try {
+      fetch('http://192.168.0.112:3333/users', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          password_confirm,
+        }),
+      });
+    } catch (error) {}
   }
 
   return (
