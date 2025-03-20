@@ -58,7 +58,7 @@ export function SignUp() {
     password_confirm,
   }: FormDataProps) {
     try {
-      const response = await fetch('http://192.168.0.112:3333/users', {
+      const response = await fetch(/users', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
