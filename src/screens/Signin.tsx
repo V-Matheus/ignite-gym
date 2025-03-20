@@ -16,7 +16,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '@contexts/AuthContext';
 import { AppError } from '@utils/AppError';
 import { ToastMenssage } from '@components/ToastMenssage';
@@ -35,6 +35,8 @@ const SignInSchema = yup.object({
 });
 
 export function SignIn() {
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigator = useNavigation<AuthNavigatorRoutesProps>();
   const { signIn } = useContext(AuthContext);
   const toast = useToast();
@@ -53,12 +55,15 @@ export function SignIn() {
 
   async function handleSignIn({ email, password }: FormDataProps) {
     try {
+      setIsLoading(true);
       await signIn(email, password);
     } catch (error) {
       const isAppError = error instanceof AppError;
       const title = isAppError
         ? error.message
         : 'Não foi possível entrar na conta';
+
+      setIsLoading(false);
 
       if (isAppError) {
         if (isAppError) {
@@ -135,7 +140,11 @@ export function SignIn() {
               )}
             />
 
-            <Button title="Acessar" onPress={handleSubmit(handleSignIn)} />
+            <Button
+              isLoading={isLoading}
+              title="Acessar"
+              onPress={handleSubmit(handleSignIn)}
+            />
           </Center>
 
           <Center flex={1} justifyContent="flex-end" mt="$4">
