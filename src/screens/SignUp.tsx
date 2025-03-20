@@ -16,6 +16,7 @@ import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { api } from '@services/api';
+import axios from 'axios';
 
 type FormDataProps = {
   name: string;
@@ -67,7 +68,9 @@ export function SignUp() {
 
       console.log(response.data);
     } catch (error) {
-      console.log(EvalError);
+      if (axios.isAxiosError(error)) {
+        console.log(error.response?.data);
+      }
     }
   }
 
