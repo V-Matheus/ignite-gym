@@ -70,7 +70,9 @@ export function SignUp() {
           password,
           password_confirm,
         }),
-      });
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data));
     } catch (error) {}
   }
 
