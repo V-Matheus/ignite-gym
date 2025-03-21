@@ -2,6 +2,7 @@ import { ExerciseCard } from '@components/ExerciseCard';
 import { Group } from '@components/Group';
 import { HomeHeader } from '@components/HomeHeader';
 import { ToastMenssage } from '@components/ToastMenssage';
+import { ExerciseDTO } from '@dtos/ExerciseDTO';
 import { Heading, HStack, Text, useToast, VStack } from '@gluestack-ui/themed';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
@@ -11,8 +12,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 
 export function Home() {
-  const [exercises, setExercises] = useState([]);
-  const [groupSelected, setGroupSelected] = useState('Costas');
+  const [exercises, setExercises] = useState<ExerciseDTO[]>([]);
+  const [groupSelected, setGroupSelected] = useState('');
   const [groups, setGroups] = useState<string[]>([]);
 
   const toast = useToast();
@@ -51,8 +52,10 @@ export function Home() {
 
   async function fetchExercisesByGroup() {
     try {
-      const response = await api(`/exercises/bygroup/${groupSelected}`);
-      console.log(response.data);
+      const response = await api<ExerciseDTO[]>(
+        `/exercises/bygroup/${groupSelected}`,
+      );
+      setExercises(response.data);
     } catch (error) {
       const isAppError = error instanceof AppError;
       const title = isAppError
@@ -115,7 +118,7 @@ export function Home() {
 
         <FlatList
           data={exercises}
-          keyExtractor={(item) => item}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={() => (
             <ExerciseCard onPress={handleOpenExerciseDetails} />
           )}
