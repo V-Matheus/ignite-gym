@@ -19,6 +19,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { api } from '@services/api';
 import { AppError } from '@utils/AppError';
 import { ToastMenssage } from '@components/ToastMenssage';
+import { useAuth } from '@hooks/useAuth';
 
 type FormDataProps = {
   name: string;
@@ -41,7 +42,10 @@ const SignUpSchema = yup.object({
 });
 
 export function SignUp() {
+  const [isLoading, setIsLoading] = useState(false);
+
   const toast = useToast();
+  const { signIn } = useAuth();
 
   const {
     control,
@@ -59,13 +63,13 @@ export function SignUp() {
 
   async function handleSignUp({ email, name, password }: FormDataProps) {
     try {
-      const response = await api.post('/users', {
+      setIsLoading(true);
+      await api.post('/users', {
         name,
         email,
         password,
       });
-
-      console.log(response.data);
+      await signIn(email, password);
     } catch (error) {
       const isAppError = error instanceof AppError;
       const title = isAppError
@@ -85,6 +89,8 @@ export function SignUp() {
           ),
         });
       }
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -175,6 +181,7 @@ export function SignUp() {
             <Button
               onPress={handleSubmit(handleSignUp)}
               title="Criar e acessar"
+              isLoading={isLoading}
             />
           </Center>
 
