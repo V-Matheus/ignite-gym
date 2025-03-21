@@ -1,5 +1,6 @@
 import { UserDTO } from '@dtos/UserDTO';
 import { api } from '@services/api';
+import { storageAuthTokenSave } from '@storage/storageAuthToken';
 import {
   storageUserSave,
   storageUserGet,
@@ -23,13 +24,35 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
   const [isLoadingUserStorageData, setIsLoadingUserStorageData] =
     useState(true);
 
+  async function storageUserAndToken({
+    user,
+    token,
+  }: {
+    user: UserDTO;
+    token: string;
+  }) {
+    try {
+      setIsLoadingUserStorageData(true);
+
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+      await storageUserSave(user);
+      await storageAuthTokenSave(token);
+      setUser(user);
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoadingUserStorageData(false);
+    }
+  }
+
   async function signIn(email: string, password: string) {
     try {
       const { data } = await api.post('/sessions', { email, password });
 
       if (data.user && data.token) {
         setUser(data.user);
-        storageUserSave(data.user);
+        storageUserAndToken(data);
       }
     } catch (error) {
       throw error;
