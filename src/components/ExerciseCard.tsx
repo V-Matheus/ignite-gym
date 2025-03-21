@@ -4,6 +4,7 @@ import { ComponentProps } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { ChevronRight } from 'lucide-react-native';
 import { ExerciseDTO } from '@dtos/ExerciseDTO';
+import { api } from '@services/api';
 
 type ExerciseCardProps = ComponentProps<typeof TouchableOpacity> & {
   data: ExerciseDTO;
@@ -22,7 +23,7 @@ export function ExerciseCard({ data, ...rest }: ExerciseCardProps) {
       >
         <Image
           source={{
-            uri: 'https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/costas-puxada-aberta-com-barra-no-pulley-1.gif',
+            uri: `${api.defaults.baseURL}/exercise/thumb/${data.thumb}`,
           }}
           alt="Imagem do exercício"
           w="$16"
