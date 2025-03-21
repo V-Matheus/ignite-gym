@@ -13,3 +13,7 @@ export async function storageUserGet(): Promise<UserDTO | null> {
 
   return user;
 }
+
+export async function storageUserRemove() {
+  await AsyncStorage.removeItem(USER_STORAGE);
+}
