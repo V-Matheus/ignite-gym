@@ -15,6 +15,16 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSytem from 'expo-file-system';
 import { useState } from 'react';
 import { ToastMenssage } from '@components/ToastMenssage';
+import { Controller, useForm } from 'react-hook-form';
+import { useAuth } from '@hooks/useAuth';
+
+type FormDataProps = {
+  name: string;
+  email: string;
+  password: string;
+  old_password: string;
+  confirm_password: string;
+};
 
 export function Profile() {
   const [userPhoto, setUserPhoto] = useState(
@@ -22,6 +32,14 @@ export function Profile() {
   );
 
   const toast = useToast();
+
+  const { user } = useAuth();
+  const { control } = useForm<FormDataProps>({
+    defaultValues: {
+      name: user.name,
+      email: user.email,
+    },
+  });
 
   async function handleUserPhotoSelect() {
     try {
@@ -86,11 +104,31 @@ export function Profile() {
           </TouchableOpacity>
 
           <Center w="$full" gap="$4">
-            <Input placeholder="Nome" bg="$gray600" />
-            <Input
-              value="victormatheus507@gmail.com"
-              bg="$gray600"
-              isReadOnly
+            <Controller
+              name="name"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="Nome"
+                  bg="$gray600"
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+            />
+
+            <Controller
+              name="email"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="E-mail"
+                  bg="$gray600"
+                  onChangeText={onChange}
+                  value={value}
+                  isReadOnly
+                />
+              )}
             />
           </Center>
 
