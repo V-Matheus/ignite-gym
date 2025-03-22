@@ -1,6 +1,7 @@
 import { HistoryCard } from '@components/HistoryCard';
 import { ScreenHeader } from '@components/ScreenHeader';
 import { ToastMenssage } from '@components/ToastMenssage';
+import { HistoryByDayDTO } from '@dtos/HistoryGroupByDay';
 import { useToast } from '@gluestack-ui/themed';
 import { Heading, Text, VStack } from '@gluestack-ui/themed';
 import { useFocusEffect } from '@react-navigation/native';
@@ -11,16 +12,7 @@ import { SectionList } from 'react-native';
 
 export function History() {
   const [isLoading, setIsLoading] = useState(true);
-  const [exercises, setExercises] = useState([
-    {
-      title: '22.07.24',
-      data: ['remada unilateral', 'puxada frontal'],
-    },
-    {
-      title: '22.07.24',
-      data: ['remada unilateral'],
-    },
-  ]);
+  const [exercises, setExercises] = useState<HistoryByDayDTO[]>([]);
 
   const toast = useToast();
 
@@ -29,6 +21,7 @@ export function History() {
       setIsLoading(true);
 
       const response = await api('/history');
+      setExercises(response.data);
     } catch (error) {
       const isAppError = error instanceof AppError;
       const title = isAppError
@@ -53,7 +46,7 @@ export function History() {
 
   useFocusEffect(
     useCallback(() => {
-      fetchHistory(); 
+      fetchHistory();
     }, []),
   );
 
@@ -63,7 +56,7 @@ export function History() {
 
       <SectionList
         sections={exercises}
-        keyExtractor={(item) => item}
+        keyExtractor={(item) => item.id}
         renderItem={() => <HistoryCard />}
         renderSectionHeader={({ section }) => (
           <Heading
