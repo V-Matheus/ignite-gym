@@ -25,7 +25,7 @@ export function Home() {
   function handleOpenExerciseDetails(exerciseId: string) {
     navigation.navigate('exercise', { exerciseId });
   }
-''
+
   async function fetchGroups() {
     try {
       const response = await api('/groups');
