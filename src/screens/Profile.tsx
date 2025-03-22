@@ -19,13 +19,15 @@ import { Controller, useForm } from 'react-hook-form';
 import { useAuth } from '@hooks/useAuth';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { api } from '@services/api';
+import { AppError } from '@utils/AppError';
 
 type FormDataProps = {
   name: string;
-  email: string;
-  password: string;
-  old_password: string;
-  confirm_password: string;
+  email?: string;
+  password?: string | null;
+  old_password?: string | null;
+  confirm_password?: string | null;
 };
 
 const profileSchema = yup.object({
@@ -46,6 +48,7 @@ const profileSchema = yup.object({
 });
 
 export function Profile() {
+  const [isUpdating, setIsUpdating] = useState(false);
   const [userPhoto, setUserPhoto] = useState(
     'https://github.com/V-Matheus.png',
   );
@@ -99,11 +102,63 @@ export function Profile() {
         setUserPhoto(photoUri);
       }
     } catch (error) {
-      console.log(error);
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : 'Não foi possivel atualizar a foto de perfil';
+
+      toast.show({
+        placement: 'top',
+        render: ({ id }) => (
+          <ToastMenssage
+            id={id}
+            action="error"
+            title={title}
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
     }
   }
 
-  async function handleProfileUpdate(data: FormDataProps) {}
+  async function handleProfileUpdate(data: FormDataProps) {
+    try {
+      setIsUpdating(true);
+
+      await api.put('/users', data);
+
+      toast.show({
+        placement: 'top',
+        render: ({ id }) => (
+          <ToastMenssage
+            id={id}
+            action="success"
+            title="Perfil atualizado!"
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : 'Não foi possivel atualizar os dados';
+
+      toast.show({
+        placement: 'top',
+        render: ({ id }) => (
+          <ToastMenssage
+            id={id}
+            action="error"
+            title={title}
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
+    } finally {
+      setIsUpdating(false);
+    }
+  }
 
   return (
     <VStack flex={1}>
@@ -215,6 +270,7 @@ export function Profile() {
             <Button
               onPress={handleSubmit(handleProfileUpdate)}
               title="Atualizar"
+              isLoading={isUpdating}
             />
           </Center>
         </Center>
