@@ -17,6 +17,8 @@ import { useState } from 'react';
 import { ToastMenssage } from '@components/ToastMenssage';
 import { Controller, useForm } from 'react-hook-form';
 import { useAuth } from '@hooks/useAuth';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 type FormDataProps = {
   name: string;
@@ -26,6 +28,10 @@ type FormDataProps = {
   confirm_password: string;
 };
 
+const profileSchema = yup.object({
+  name: yup.string().required('Informe o nome'),
+});
+
 export function Profile() {
   const [userPhoto, setUserPhoto] = useState(
     'https://github.com/V-Matheus.png',
@@ -34,11 +40,16 @@ export function Profile() {
   const toast = useToast();
 
   const { user } = useAuth();
-  const { control, handleSubmit } = useForm<FormDataProps>({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormDataProps>({
     defaultValues: {
       name: user.name,
       email: user.email,
     },
+    resolver: yupResolver(profileSchema),
   });
 
   async function handleUserPhotoSelect() {
@@ -79,9 +90,7 @@ export function Profile() {
     }
   }
 
-  async function handleProfileUpdate(data: FormDataProps) {
-    
-  }
+  async function handleProfileUpdate(data: FormDataProps) {}
 
   return (
     <VStack flex={1}>
@@ -117,6 +126,7 @@ export function Profile() {
                   bg="$gray600"
                   onChangeText={onChange}
                   value={value}
+                  errorMessage={errors.name?.message}
                 />
               )}
             />
@@ -170,6 +180,7 @@ export function Profile() {
                   bg="$gray600"
                   secureTextEntry
                   onChangeText={onChange}
+                  errorMessage={errors.password?.message}
                 />
               )}
             />
@@ -183,6 +194,7 @@ export function Profile() {
                   bg="$gray600"
                   secureTextEntry
                   onChangeText={onChange}
+                  errorMessage={errors.confirm_password?.message}
                 />
               )}
             />
