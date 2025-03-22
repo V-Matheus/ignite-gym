@@ -15,7 +15,7 @@ import { FlatList } from 'react-native';
 export function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [exercises, setExercises] = useState<ExerciseDTO[]>([]);
-  const [groupSelected, setGroupSelected] = useState('costas');
+  const [groupSelected, setGroupSelected] = useState('antebraço');
   const [groups, setGroups] = useState<string[]>([]);
 
   const toast = useToast();
@@ -25,7 +25,7 @@ export function Home() {
   function handleOpenExerciseDetails(exerciseId: string) {
     navigation.navigate('exercise', { exerciseId });
   }
-
+''
   async function fetchGroups() {
     try {
       const response = await api('/groups');
