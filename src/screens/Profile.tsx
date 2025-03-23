@@ -99,7 +99,16 @@ export function Profile() {
             ),
           });
 
-        setUserPhoto(photoUri);
+          const fileExtension = photoUri.split('.').pop();
+
+        const profile = {
+          name: `${user.name}.${fileExtension}`.toLowerCase(),
+          uri: photoUri,
+          type: `image/${photoSelected.assets[0].type}/${fileExtension}`,
+        }
+
+        console.log(profile);
+        
       }
     } catch (error) {
       const isAppError = error instanceof AppError;
