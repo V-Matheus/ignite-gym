@@ -34,11 +34,15 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
     setUser(user);
   }
 
-  async function storagedUserAndTokenSave(user: UserDTO, token: string) {
+  async function storagedUserAndTokenSave(
+    user: UserDTO,
+    token: string,
+    refresh_token: string,
+  ) {
     try {
       setIsLoadingUserStorageData(true);
       await storageUserSave(user);
-      await storageAuthTokenSave(token);
+      await storageAuthTokenSave({ token, refresh_token });
     } catch (error) {
       throw error;
     } finally {
@@ -50,9 +54,13 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
     try {
       const { data } = await api.post('/sessions', { email, password });
 
-      if (data.user && data.token) {
+      if (data.user && data.token && data.refresh_token) {
         setIsLoadingUserStorageData(true);
-        await storagedUserAndTokenSave(data.user, data.token);
+        await storagedUserAndTokenSave(
+          data.user,
+          data.token,
+          data.refresh_token,
+        );
         userAndTokenUpdate(data.user, data.token);
       }
     } catch (error) {
@@ -89,7 +97,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
       setIsLoadingUserStorageData(true);
 
       const userLogged = await storageUserGet();
-      const token = await storageAuthTokenGet();
+      const { token } = await storageAuthTokenGet();
 
       if (token && userLogged) {
         userAndTokenUpdate(userLogged, token);
