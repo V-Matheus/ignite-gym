@@ -99,16 +99,47 @@ export function Profile() {
             ),
           });
 
-          const fileExtension = photoUri.split('.').pop();
+        const fileExtension = photoSelected.assets[0].uri.split('.').pop();
 
-        const profile = {
-          name: `${user.name}.${fileExtension}`.toLowerCase(),
-          uri: photoUri,
-          type: `image/${photoSelected.assets[0].type}/${fileExtension}`,
-        }
+        const photoFile = {
+          name: `${user.name}.${fileExtension}`
+            .replaceAll(' ', '')
+            .toLowerCase(),
+          uri: photoSelected.assets[0].uri,
+          type: `${photoSelected.assets[0].type}/${fileExtension}`,
+        } as any;
 
-        console.log(profile);
-        
+        const userPhotoUploadForm = new FormData();
+
+        userPhotoUploadForm.append('avatar', photoFile);
+
+        const avatarUpdtedResponse = await api.patch(
+          '/users/avatar',
+          userPhotoUploadForm,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        );
+
+        const userUpdated = user;
+
+        userUpdated.avatar = avatarUpdtedResponse.data.avatar;
+
+        await updateUserProfile(userUpdated);
+
+        toast.show({
+          placement: 'top',
+          render: ({ id }) => (
+            <ToastMenssage
+              id={id}
+              action="success"
+              title="Foto atualizada!"
+              onClose={() => toast.close(id)}
+            />
+          ),
+        });
       }
     } catch (error) {
       const isAppError = error instanceof AppError;
