@@ -1,4 +1,7 @@
-import { storageAuthTokenGet } from '@storage/storageAuthToken';
+import {
+  storageAuthTokenGet,
+  storageAuthTokenSave,
+} from '@storage/storageAuthToken';
 import { AppError } from '@utils/AppError';
 import axios, { Axios, AxiosError, AxiosInstance } from 'axios';
 
@@ -58,7 +61,24 @@ api.registerInterceptTokenManger = (signOut: SignOutProps) => {
               const { data } = await api.post('/sessions/refresh-token', {
                 refresh_token,
               });
-              console.log(data);
+
+              await storageAuthTokenSave({
+                token: data.token,
+                refresh_token: data.refresh_token,
+              });
+
+              if (originalRequestConfig.data) {
+                originalRequestConfig.data = JSON.parse(
+                  originalRequestConfig.data,
+                );
+              }
+
+              originalRequestConfig.headers.Authorization = `Bearer ${data.token}`;
+              api.defaults.headers.Authorization = `Bearer ${data.token}`;
+
+              failedQueue.forEach((request) => request.onSucess(data.token));
+
+              resolve(api(originalRequestConfig));
             } catch (error: any) {
               failedQueue.forEach((request) => request.onFailure(error));
               signOut();
