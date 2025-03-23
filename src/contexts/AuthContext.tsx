@@ -102,6 +102,14 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
+    const subscribe = api.registerInterceptTokenManger(signOut);
+
+    return () => {
+      subscribe;
+    };
+  }, [signOut]);
+
+  useEffect(() => {
     loaderUserData();
   }, []);
 
